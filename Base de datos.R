@@ -1,9 +1,17 @@
 library(usethis)
-library(pdfetch)
+#Base de datos finaceira :
 library(quantmod)
+#Manipulação de dados:
+library(data.table)
+#Criar vizualizações:
+library(plotly)
+#Manipular os datos:
+library(dplyr)
+#Utilizar a função na.locf:
+library(zoo)
 
 dt <- "2017-01-01"
-
+df <- "2022-04-01"
 # INDEX VALUES SINCE 2010 
 #IBOVESPA (OK)
 getSymbols("^BVSP" ,from =dt , to = "2022-04-01", auto.assign= F)
@@ -15,13 +23,7 @@ getSymbols("^CMC200" , from =dt , to = "2022-04-01", auto.assign= F)
 getSymbols("FIXA11.SA" , from =dt , to = "2022-04-01", auto.assign= F)
 # Ouro futuro (OK)
 getSymbols("GC=F" ,from =dt, to = "2022-04-01", auto.assign= F)
-#Bitcoin (#2014)
+#Bitcoin (#2014
 getSymbols("BTC-USD" ,from =dt, to = "2022-04-01", auto.assign= F)
+#Selic (Usando APIs do Banco Central):
 
-
-chartSeries("^BVSP")
-chartSeries("^GSPC")
-chartSeries("^CMC200")
-chartSeries("FIXA11.SA")
-chartSeries("GC=F")
-chartSeries("BTC-USD")
