@@ -12,8 +12,6 @@ chartSeries(IXIC)
 #CMC Crypto 200 Index
 getSymbols("^CMC200" , from = " 2010-01-01", to = "2022-04-01")
 chartSeries(CMC200)
-#Itau FIC De Fundos De Investimento Em Direitos Creditorios De Infraestrutura
-getSymbols("IFRA11.SA" , from = " 2010-01-01", to = "2022-04-01")
 #Mirae Asset Renda Fixa Pre Fundo De Indice
 getSymbols("FIXA11.SA" , from = " 2010-01-01", to = "2022-04-01")
 chartSeries(FIXA11.SA)
