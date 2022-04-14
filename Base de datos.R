@@ -12,6 +12,7 @@ library(dplyr)
 library(zoo)
 #organização dos dados
 library(tibble)
+library(tidyverse)
 
 #definindo datas
 dt <- "2017-01-01"
