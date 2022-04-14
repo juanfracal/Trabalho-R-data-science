@@ -5,7 +5,7 @@ library(quantmod)
 library(data.table)
 #Criar vizualizações:
 library(plotly)
-#Manipular os datos:
+#Manipular os dados:
 library(dplyr)
 #Utilizar a função na.locf:
 library(zoo)
