@@ -11,7 +11,7 @@ library(dplyr)
 #Utilizar a função na.locf:
 library(zoo)
 #organização dos dados
-library(tidyverse)
+library(tibble)
 
 #definindo datas
 dt <- "2017-01-01"
@@ -32,18 +32,18 @@ getSymbols("BTC-USD" ,from =dt, to = df, auto.assign= F)
 url_selic <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=csv&dataInicial=',
                     format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
 selic <- fread(url_selic)
-selic$data <- as.Date(selic$data, format = '%d/%m/%Y')
+selic$data <- as.Date(selic$data, from=dt, to=df, format = '%d/%m/%Y')
 selic$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", selic$valor)))
 # IPCA (Usando APIs do Banco Central)
 url_IPCA <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=csv&dataInicial=',
                    format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
 IPCA <- fread(url_IPCA)
-IPCA$data <- as.Date(IPCA$data, format = '%d/%m/%Y')
+IPCA$data <- as.Date(IPCA$data, from=dt, to=df, format = '%d/%m/%Y')
 IPCA$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", IPCA$valor)))
 # CDI (Usando APIs do Banco Central)
 url_CDI <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=csv&dataInicial=',
                   format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
 CDI <- fread(url_CDI)
-CDI$data <- as.Date(CDI$data, format = '%d/%m/%Y')
+CDI$data <- as.Date(CDI$data, from=dt, to=df, format = '%d/%m/%Y')
 CDI$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", CDI$valor)))
 
