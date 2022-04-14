@@ -1,3 +1,4 @@
+#automatizar tarefas repetitivas
 library(usethis)
 #Base de dados finaceira :
 library(quantmod)
