@@ -1,5 +1,5 @@
 library(usethis)
-#Base de datos finaceira :
+#Base de dados finaceira :
 library(quantmod)
 #Manipulação de dados:
 library(data.table)
@@ -12,8 +12,10 @@ library(zoo)
 #organização dos dados
 library(tidyverse)
 
+#definindo datas
 dt <- "2017-01-01"
 df <- "2022-04-01"
+
 # INDEX VALUES SINCE 2010 
 #IBOVESPA (OK)
 getSymbols("^BVSP" ,from =dt , to = df, auto.assign= F)
