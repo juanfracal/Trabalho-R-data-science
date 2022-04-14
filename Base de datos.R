@@ -1,18 +1,16 @@
-#Instalar pacotes pdfetch e quantmod em "Tools" 
+library(usethis)
 library(pdfetch)
 library(quantmod)
 
-#Importa os valores do índice Bovespa para o R
-pdfetch_YAHOO("^BVSP")
-#Define BVSP
-BOVESPA=pdfetch_YAHOO("^BVSP")
-#gRÁFICO 
-plot.ts(BOVESPA$`^BVSP.open`)
-#Definindo um intervalo de tempo com quantmod
-#Neste caso desde 2010
-getSymbols("^BVSP" ,from = " 2010-01-01")
-getSymbols("^IXIC", from = " 2010-01-01")
-getSymbols("^BTC-USD", from = " 2010-01-01")
-getSymbols("^IXIC", from = " 2010-01-01")
-getSymbols("^IXIC", from = " 2010-01-01")
-getSymbols("^IXIC", from = " 2010-01-01")
+# INDEX VALUES SINCE 2010 
+#IBOVESPA
+getSymbols("^BVSP" ,from = " 2010-01-01", to = "2022-04-01")
+#NASDAQ
+getSymbols("^IXIC" , from = " 2010-01-01", to = "2022-04-01")
+#CMC Crypto 200 Index
+getSymbols("^CMC200" , from = " 2010-01-01", to = "2022-04-01")
+#Itau FIC De Fundos De Investimento Em Direitos Creditorios De Infraestrutura
+getSymbols("IFRA11.SA" , from = " 2010-01-01", to = "2022-04-01")
+#Mirae Asset Renda Fixa Pre Fundo De Indice
+getSymbols("FIXA11.SA" , from = " 2010-01-01", to = "2022-04-01")
+
