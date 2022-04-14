@@ -5,16 +5,18 @@ library(quantmod)
 # INDEX VALUES SINCE 2010 
 #IBOVESPA
 getSymbols("^BVSP" ,from = " 2010-01-01", to = "2022-04-01")
-chartSeries(BVSP)
 #NASDAQ
 getSymbols("^IXIC" , from = " 2010-01-01", to = "2022-04-01")
-chartSeries(IXIC)
 #CMC Crypto 200 Index
 getSymbols("^CMC200" , from = " 2010-01-01", to = "2022-04-01")
-chartSeries(CMC200)
 #Mirae Asset Renda Fixa Pre Fundo De Indice
 getSymbols("FIXA11.SA" , from = " 2010-01-01", to = "2022-04-01")
-chartSeries(FIXA11.SA)
 # Ouro futuro
 getSymbols("GC=F" ,from = " 2010-01-01", to = "2022-04-01")
+
+#Gráficos: 
+chartSeries(BVSP)
+chartSeries(IXIC)
+chartSeries(CMC200)
+chartSeries(FIXA11.SA)
 chartSeries(GC=F)
