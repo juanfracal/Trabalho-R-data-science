@@ -2,6 +2,8 @@ library(usethis)
 library(pdfetch)
 library(quantmod)
 
+dt <- "2010-01-01"
+
 # INDEX VALUES SINCE 2010 
 #IBOVESPA
 getSymbols("^BVSP" ,from = " 2010-01-01", to = "2022-04-01")
