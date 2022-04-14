@@ -13,4 +13,5 @@ getSymbols("^CMC200" , from = " 2010-01-01", to = "2022-04-01")
 getSymbols("IFRA11.SA" , from = " 2010-01-01", to = "2022-04-01")
 #Mirae Asset Renda Fixa Pre Fundo De Indice
 getSymbols("FIXA11.SA" , from = " 2010-01-01", to = "2022-04-01")
-
+# Ouro futuro
+getSymbols("GC=F" ,from = " 2010-01-01", to = "2022-04-01")
