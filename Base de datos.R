@@ -6,17 +6,17 @@ dt <- "2010-01-01"
 
 # INDEX VALUES SINCE 2010 
 #IBOVESPA (OK)
-getSymbols("^BVSP" ,from = " 2010-01-01", to = "2022-04-01", auto.assign= F)
+getSymbols("^BVSP" ,from =dt , to = "2022-04-01", auto.assign= F)
 #NASDAQ (No caso o SP500, composto pelas 500 maioresA empresas listadas na bolsa de NY)
-getSymbols("^GSPC" , from = " 2010-01-01", to = "2022-04-01", auto.assign= F)
+getSymbols("^GSPC" , from =dt, to = "2022-04-01", auto.assign= F)
 #CMC Crypto 200 Index (2019)
-getSymbols("^CMC200" , from = " 2010-01-01", to = "2022-04-01", auto.assign= F)
+getSymbols("^CMC200" , from =dt , to = "2022-04-01", auto.assign= F)
 #Mirae Asset Renda Fixa Pre Fundo De Indice (2018)
-getSymbols("FIXA11.SA" , from = " 2010-01-01", to = "2022-04-01", auto.assign= F)
+getSymbols("FIXA11.SA" , from =dt , to = "2022-04-01", auto.assign= F)
 # Ouro futuro (OK)
-getSymbols("GC=F" ,from = " 2010-01-01", to = "2022-04-01", auto.assign= F)
+getSymbols("GC=F" ,from =dt, to = "2022-04-01", auto.assign= F)
 #Bitcoin (#2014)
-getSymbols("BTC-USD" ,from = " 2010-01-01", to = "2022-04-01", auto.assign= F)
+getSymbols("BTC-USD" ,from =dt, to = "2022-04-01", auto.assign= F)
 
 
 chartSeries(BVSP)
