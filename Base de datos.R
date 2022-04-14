@@ -2,7 +2,7 @@ library(usethis)
 library(pdfetch)
 library(quantmod)
 
-dt <- "2010-01-01"
+dt <- "2017-01-01"
 
 # INDEX VALUES SINCE 2010 
 #IBOVESPA (OK)
@@ -19,9 +19,9 @@ getSymbols("GC=F" ,from =dt, to = "2022-04-01", auto.assign= F)
 getSymbols("BTC-USD" ,from =dt, to = "2022-04-01", auto.assign= F)
 
 
-chartSeries(BVSP)
-chartSeries(IXIC)
-chartSeries(CMC200)
-chartSeries(FIXA11.SA)
-chartSeries(GC=F)
-chartSeries(BTC-USD)
+chartSeries("^BVSP")
+chartSeries("^GSPC")
+chartSeries("^CMC200")
+chartSeries("FIXA11.SA")
+chartSeries("GC=F")
+chartSeries("BTC-USD")
