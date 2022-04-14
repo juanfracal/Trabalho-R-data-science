@@ -9,6 +9,8 @@ library(plotly)
 library(dplyr)
 #Utilizar a função na.locf:
 library(zoo)
+#organização dos dados
+library(tidyverse)
 
 dt <- "2017-01-01"
 df <- "2022-04-01"
