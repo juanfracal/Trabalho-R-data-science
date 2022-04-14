@@ -29,5 +29,22 @@ getSymbols("FIXA11.SA" , from =dt , to = df, auto.assign= F)
 getSymbols("GC=F" ,from =dt, to = df, auto.assign= F)
 #Bitcoin (#2014
 getSymbols("BTC-USD" ,from =dt, to = df, auto.assign= F)
-#Selic (Usando APIs do Banco Central):
+#Selic (Usando APIs do Banco Central)
+url_selic <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=csv&dataInicial=',
+                    format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
+selic <- fread(url_selic)
+selic$data <- as.Date(selic$data, format = '%d/%m/%Y')
+selic$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", selic$valor)))
+# IPCA (Usando APIs do Banco Central)
+url_IPCA <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=csv&dataInicial=',
+                   format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
+IPCA <- fread(url_IPCA)
+IPCA$data <- as.Date(IPCA$data, format = '%d/%m/%Y')
+IPCA$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", IPCA$valor)))
+# CDI (Usando APIs do Banco Central)
+url_CDI <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=csv&dataInicial=',
+                  format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
+CDI <- fread(url_CDI)
+CDI$data <- as.Date(CDI$data, format = '%d/%m/%Y')
+CDI$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", CDI$valor)))
 
