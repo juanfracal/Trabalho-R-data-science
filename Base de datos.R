@@ -22,12 +22,12 @@ dt <- "2017-01-01"
 df <- "2022-04-01"
 
 # INDEX VALUES SINCE 2017 
-#IBOVESPA
+#IBOVESPA (índice de ações da bolsa brasileira, há 400 empresas listadas mas apenas 82 ações compondo o índice)
 #getSymbols() pertence ao pacote quantmod, trazendo base de datos diretamente do Yahoo Finance. Para isso colocamos o código do ativo no site e definimos as datas
 getSymbols("^BVSP" ,from =dt , to = df, auto.assign= F)
 #NASDAQ (No caso o SP500, composto pelas 500 maioresA empresas listadas na bolsa de NY)
 getSymbols("^GSPC" , from =dt, to = df, auto.assign= F)
-#CMC Crypto 200 Index (2019)
+#CMC Crypto 200 Index (2019) 200 maiores criptoativos por capitalização de mercado (marketcap)
 getSymbols("^CMC200" , from =dt , to = df, auto.assign= F)
 # Ouro futuro
 getSymbols("GC=F" ,from =dt, to = df, auto.assign= F)
@@ -56,3 +56,10 @@ CDI <- fread(url_CDI)
 CDI$data <- as.Date(CDI$data, from=dt, to=df, format = '%d/%m/%Y')
 CDI$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", CDI$valor)))
 
+#referencias (vistas em 13/04 e 14/04):
+#https://medium.com/@gabriela.koreeda/an%C3%A1lise-de-uma-carteira-de-renda-fixa-em-r-d13510e95ada
+#https://github.com/gabrielakoreeda/carteira-investimentos/blob/master/carteira.R
+#https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/na.locf
+#https://www.youtube.com/watch?v=uwuPQUa2TjI&t=457s&ab_channel=codebliss
+#https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/na.locf
+#https://www.youtube.com/watch?v=7rFsu48oBn8&ab_channel=C%C3%B3digoQuant-Finan%C3%A7asQuantitativas
