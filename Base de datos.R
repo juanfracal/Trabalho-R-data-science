@@ -1,6 +1,9 @@
+#Integrantes: Juna Francisco, Renan Olivier e Guilherme Vaccari
+#Nosso objetivo é criar diferentes carteiras com distribuições diferentes de diversos ativos como Renda fixa, ouro, criptomoedas e ações. 
+#Depois comparariamos as carteiras em relação aos Retornos, Risco, Sharpe, Volatilidade anualizada e Máx. Drawdown.
 #automatizar tarefas repetitivas
 library(usethis)
-#Base de dados finaceira :
+#Base de dados finaceira (Utilizamos este pacote para levar base de dados do Yahoo Finance diretamente para o R) :
 library(quantmod)
 #Manipulação de dados:
 library(data.table)
@@ -14,7 +17,7 @@ library(zoo)
 library(tibble)
 library(tidyverse)
 
-#definindo datas
+#definindo datas 
 dt <- "2017-01-01"
 df <- "2022-04-01"
 
@@ -29,6 +32,7 @@ getSymbols("^CMC200" , from =dt , to = df, auto.assign= F)
 getSymbols("GC=F" ,from =dt, to = df, auto.assign= F)
 #Bitcoin 
 getSymbols("BTC-USD" ,from =dt, to = df, auto.assign= F)
+#Para a Renda fixa utilizamos o banco de dados disponibilizado pelo próprio Banco Central
 #Selic (Usando APIs do Banco Central)
 url_selic <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=csv&dataInicial=',
                     format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
