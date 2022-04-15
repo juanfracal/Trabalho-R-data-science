@@ -23,6 +23,7 @@ df <- "2022-04-01"
 
 # INDEX VALUES SINCE 2017 
 #IBOVESPA
+#getSymbols() pertence ao pacote quantmod, trazendo base de datos diretamente do Yahoo Finance. Para isso colocamos o código do ativo no site e definimos as datas
 getSymbols("^BVSP" ,from =dt , to = df, auto.assign= F)
 #NASDAQ (No caso o SP500, composto pelas 500 maioresA empresas listadas na bolsa de NY)
 getSymbols("^GSPC" , from =dt, to = df, auto.assign= F)
