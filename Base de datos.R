@@ -17,7 +17,7 @@ library(zoo)
 library(tibble)
 library(tidyverse)
 
-#definindo datas 
+#definindo datas para "filtrar" os valores da base de dados do Yahoo Finance 
 dt <- "2017-01-01"
 df <- "2022-04-01"
 
@@ -33,6 +33,7 @@ getSymbols("GC=F" ,from =dt, to = df, auto.assign= F)
 #Bitcoin 
 getSymbols("BTC-USD" ,from =dt, to = df, auto.assign= F)
 #Para a Renda fixa utilizamos o banco de dados disponibilizado pelo próprio Banco Central
+#Novamente filtraremos o período no qual trabalharemos e trocando caracteres da base de datos 
 #Selic (Usando APIs do Banco Central)
 url_selic <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=csv&dataInicial=',
                     format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
