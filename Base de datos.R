@@ -1,5 +1,5 @@
 #Integrantes: Juna Francisco, Renan Olivier e Guilherme Vaccari
-#Nosso objetivo é criar diferentes carteiras com distribuições diferentes de diversos ativos como Renda fixa, ouro, criptomoedas e ações. 
+#Nosso objetivo é criar diferentes carteiras com distribuições diferentes de diversos ativos como Renda Variável, Renda fixa, ouro e criptomoedas.
 #Depois comparariamos as carteiras em relação aos Retornos, Risco, Sharpe, Volatilidade anualizada e Máx. Drawdown.
 #automatizar tarefas repetitivas
 library(usethis)
