@@ -63,4 +63,4 @@ CDI$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", CDI$valor)))
 #https://www.youtube.com/watch?v=uwuPQUa2TjI&t=457s&ab_channel=codebliss
 #https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/na.locf
 #https://www.youtube.com/watch?v=7rFsu48oBn8&ab_channel=C%C3%B3digoQuant-Finan%C3%A7asQuantitativas
-#https://www.youtube.com/watch?v=SN4vpCY95k0&list=PLohrRZcgNaBvWFZev2qTpc-fr32dtnXPf&index=2&t=319s
+#https://www.youtube.com/watch?v=SN4vpCY95k0
