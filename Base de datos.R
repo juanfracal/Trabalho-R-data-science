@@ -1,6 +1,7 @@
 #Integrantes: Juna Francisco, Renan Olivier e Guilherme Vaccari
 #Nosso objetivo é criar diferentes carteiras com distribuições diferentes de diversos ativos como Renda Variável, Renda fixa, ouro e criptomoedas.
 #Depois comparariamos as carteiras em relação aos Retornos, Risco, Sharpe, Volatilidade anualizada e Máx. Drawdown.
+#Por último, responderíamos a pergunta: Vale apena investir em criptoativos?
 #automatizar tarefas repetitivas
 library(usethis)
 #Base de dados finaceira (Utilizamos este pacote para levar base de dados do Yahoo Finance diretamente para o R) :
@@ -23,18 +24,18 @@ df <- "2022-04-01"
 
 # INDEX VALUES SINCE 2017 
 #IBOVESPA (índice de ações da bolsa brasileira, há 400 empresas listadas mas apenas 82 ações compondo o índice)
-#getSymbols() pertence ao pacote quantmod, trazendo base de datos diretamente do Yahoo Finance. Para isso colocamos o código do ativo no site e definimos as datas
+#getSymbols() pertence ao pacote quantmod, trazendo base de dados diretamente do Yahoo Finance. Para isso colocamos o código do ativo no site e definimos as datas
 getSymbols("^BVSP" ,from =dt , to = df, auto.assign= F)
 #NASDAQ (No caso o SP500, composto pelas 500 maioresA empresas listadas na bolsa de NY)
 getSymbols("^GSPC" , from =dt, to = df, auto.assign= F)
 #CMC Crypto 200 Index (2019) 200 maiores criptoativos por capitalização de mercado (marketcap)
 getSymbols("^CMC200" , from =dt , to = df, auto.assign= F)
-# Ouro futuro
+# Ouro futuro, visto que num sentido puramente financeiro ele é negociado a partir de contratos do tipo
 getSymbols("GC=F" ,from =dt, to = df, auto.assign= F)
-#Bitcoin 
+#Bitcoin, principal criptoativo
 getSymbols("BTC-USD" ,from =dt, to = df, auto.assign= F)
 #Para a Renda fixa utilizamos o banco de dados disponibilizado pelo próprio Banco Central
-#Novamente filtraremos o período no qual trabalharemos e trocando caracteres da base de datos 
+#Novamente filtraremos o período no qual trabalharemos e trocando caracteres da base de dados 
 #Selic (Usando APIs do Banco Central)
 url_selic <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=csv&dataInicial=',
                     format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
