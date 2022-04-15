@@ -39,7 +39,9 @@ getSymbols("BTC-USD" ,from =dt, to = df, auto.assign= F)
 url_selic <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=csv&dataInicial=',
                     format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
 selic <- fread(url_selic)
+#Definimos a data da base de datos: 
 selic$data <- as.Date(selic$data, from=dt, to=df, format = '%d/%m/%Y')
+#Troca de carateres
 selic$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", selic$valor)))
 # IPCA (Usando APIs do Banco Central)
 url_IPCA <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=csv&dataInicial=',
