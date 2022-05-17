@@ -57,6 +57,55 @@ CDI <- fread(url_CDI)
 CDI$data <- as.Date(CDI$data, from=dt, to=df, format = '%d/%m/%Y')
 CDI$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", CDI$valor)))
 
+args(solve.QP)
+
+portfolioWeights <- function(assetReturns, targetReturn)
+{
+  nAssets = ncol(assetReturns)
+  portfolio = solve.QP(
+    Dmat = cov(assetReturns),
+    dvec = rep(0, times=nAssets),
+    Amat = t(rbind(Return=colMeans(assetReturns),
+                   Budget=rep(1, nAssets), LongOnly=diag(nAssets))),
+    bvec = c(Return=targetReturn, budget=1,
+             LongOnly=rep(0, times=nAssets)),
+    meq=2)
+  weights = portfolio$solution
+  weights
+}
+
+tangencyPortfolio <-
+  function (assetReturns, riskFreeRate=0)
+  {
+    # 1 Sharpe Ratio Function:
+    sharpeRatio <- function(x, assetReturns, riskFreeRate)
+    {
+      targetReturn = x
+      weights = portfolioWeights(assetReturns, targetReturn)
+      targetRisk = sqrt( weights %*% cov(assetReturns) %*% weights )[[1]]
+      ratio = (targetReturn - riskFreeRate)/targetRisk
+      attr(ratio, "weights") <- weights
+      attr(ratio, "targetRisk") <- targetRisk
+      ratio
+    }
+# 2 Optimize Tangency Portfolio:
+    nAssets = ncol(assetReturns)
+    mu = colMeans(assetReturns)
+    Cov = cov(assetReturns)
+    tgPortfolio <- optimize(
+      f=sharpeRatio, interval=range(mu), maximum=TRUE,
+      assetReturns=assetReturns, riskFreeRate=riskFreeRate)
+    # 3 Tangency Portfolio Characteristics:
+    tgReturn = tgPortfolio$maximum
+    tgRisk = attr(tgPortfolio$objective, "targetRisk")
+    tgWeights = attr(tgPortfolio$objective, "weights")
+    sharpeRatio = sharpeRatio(tgReturn, assetReturns, riskFreeRate)[[1]]
+    # Return Value:
+    list(
+      sharpeRatio=sharpeRatio,
+      tgRisk=tgRisk, tgReturn=tgReturn, tgWeights=tgWeights)
+  }
+
 #referencias (vistas em 13/04 e 14/04):
 #https://medium.com/@gabriela.koreeda/an%C3%A1lise-de-uma-carteira-de-renda-fixa-em-r-d13510e95ada
 #https://github.com/gabrielakoreeda/carteira-investimentos/blob/master/carteira.R
@@ -65,3 +114,4 @@ CDI$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", CDI$valor)))
 #https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/na.locf
 #https://www.youtube.com/watch?v=7rFsu48oBn8&ab_channel=C%C3%B3digoQuant-Finan%C3%A7asQuantitativas
 #https://www.youtube.com/watch?v=SN4vpCY95k0
+#Basic R for Finance
