@@ -2,6 +2,8 @@
 #Nosso objetivo é criar diferentes carteiras com distribuições diferentes de diversos ativos como Renda Variável, Renda fixa, ouro e criptomoedas.
 #Depois comparariamos as carteiras em relação aos Retornos, Risco, Sharpe, Volatilidade anualizada e Máx. Drawdown.
 #Por último, responderíamos a pergunta: Vale apena investir em criptoativos?
+#resolver problemas quadraticos
+library(quadprog)
 #automatizar tarefas repetitivas
 library(usethis)
 #Base de dados finaceira (Utilizamos este pacote para levar base de dados do Yahoo Finance diretamente para o R) :
