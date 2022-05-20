@@ -61,6 +61,10 @@ CDI$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", CDI$valor)))
 
 args(solve.QP)
 
+assetReturns <- 100*
+
+targetReturn <- mean(colMeans(assetReturns))
+
 portfolioWeights <- function(assetReturns, targetReturn)
 {
   nAssets = ncol(assetReturns)
