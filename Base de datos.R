@@ -24,7 +24,7 @@ TickerList <- c("^BVSP", "^GSPC","^CMC200", "GC=F", "BTC-USD")
 ClosingPricesRead <- NULL
 for (Ticker in TickerList)
   ClosingPricesRead <- cbind(ClosingPricesRead,
-                             getSymbols.yahoo(Ticker, from="1950-01-01", verbose=FALSE, auto.assign=FALSE)[,6]) # [,6] = keep the adjusted prices
+                             getSymbols.yahoo(Ticker, from="1950-01-01", verbose=FALSE, auto.assign=FALSE)[,6]) # [,6] = mantém preços ajustados
 
 #mantém apenas as datas com preços de fechamento
 
