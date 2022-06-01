@@ -1,120 +1,102 @@
-#Integrantes: Juna Francisco, Renan Olivier e Guilherme Vaccari
+#Integrantes: Juan Francisco, Renan Olivier e Guilherme Vaccari
 #Nosso objetivo é criar diferentes carteiras com distribuições diferentes de diversos ativos como Renda Variável, Renda fixa, ouro e criptomoedas.
 #Depois comparariamos as carteiras em relação aos Retornos, Risco, Sharpe, Volatilidade anualizada e Máx. Drawdown.
 #Por último, responderíamos a pergunta: Vale apena investir em criptoativos?
-#resolver problemas quadraticos
-library(quadprog)
-#automatizar tarefas repetitivas
-library(usethis)
-#Base de dados finaceira (Utilizamos este pacote para levar base de dados do Yahoo Finance diretamente para o R) :
-library(quantmod)
-#Manipulação de dados:
-library(data.table)
-#Criar vizualizações:
-library(plotly)
-#Manipular os dados:
-library(dplyr)
-#Utilizar a função na.locf:
-library(zoo)
-#organização dos dados
-library(tibble)
-library(tidyverse)
 
-#definindo datas para "filtrar" os valores da base de dados do Yahoo Finance 
-dt <- "2017-01-01"
-df <- "2022-04-01"
+#Integrantes: Juan Francisco, Renan Olivier e Guilherme Vaccari
+#Nosso objetivo é criar diferentes carteiras com distribuições diferentes de diversos ativos como Renda Variável, Renda fixa, ouro e criptomoedas.
+#Depois comparariamos as carteiras em relação aos Retornos, Risco, Sharpe, Volatilidade anualizada e Máx. Drawdown.
+#Por último, responderíamos a pergunta: Vale apena investir em criptoativos?
 
-# INDEX VALUES SINCE 2017 
-#IBOVESPA (índice de ações da bolsa brasileira, há 400 empresas listadas mas apenas 82 ações compondo o índice)
-#getSymbols() pertence ao pacote quantmod, trazendo base de dados diretamente do Yahoo Finance. Para isso colocamos o código do ativo no site e definimos as datas
-getSymbols("^BVSP" ,from =dt , to = df, auto.assign= F)
-#NASDAQ (No caso o SP500, composto pelas 500 maioresA empresas listadas na bolsa de NY)
-getSymbols("^GSPC" , from =dt, to = df, auto.assign= F)
-#CMC Crypto 200 Index (2019) 200 maiores criptoativos por capitalização de mercado (marketcap)
-getSymbols("^CMC200" , from =dt , to = df, auto.assign= F)
-# Ouro futuro, visto que num sentido puramente financeiro ele é negociado a partir de contratos do tipo
-getSymbols("GC=F" ,from =dt, to = df, auto.assign= F)
-#Bitcoin, principal criptoativo
-getSymbols("BTC-USD" ,from =dt, to = df, auto.assign= F)
-#Para a Renda fixa utilizamos o banco de dados disponibilizado pelo próprio Banco Central
-#Novamente filtraremos o período no qual trabalharemos e trocando caracteres da base de dados 
-#Selic (Usando APIs do Banco Central)
-url_selic <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.11/dados?formato=csv&dataInicial=',
-                    format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
-selic <- fread(url_selic)
-#Definimos a data da base de datos: 
-selic$data <- as.Date(selic$data, from=dt, to=df, format = '%d/%m/%Y')
-#Troca de carateres
-selic$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", selic$valor)))
-# IPCA (Usando APIs do Banco Central)
-url_IPCA <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=csv&dataInicial=',
-                   format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
-IPCA <- fread(url_IPCA)
-IPCA$data <- as.Date(IPCA$data, from=dt, to=df, format = '%d/%m/%Y')
-IPCA$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", IPCA$valor)))
-# CDI (Usando APIs do Banco Central)
-url_CDI <- paste0('http://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=csv&dataInicial=',
-                  format(dates[1], '%d/%m/%Y'), '&dataFinal=', format(dates[2], '%d/%m/%Y'))
-CDI <- fread(url_CDI)
-CDI$data <- as.Date(CDI$data, from=dt, to=df, format = '%d/%m/%Y')
-CDI$valor <- as.numeric(gsub(",", ".", gsub("\\.", "", CDI$valor)))
+#pega as rotinas das bibliotecas necessárias
 
-args(solve.QP)
+suppressPackageStartupMessages(require (timeSeries))
+suppressPackageStartupMessages(require (fPortfolio)) 
+suppressPackageStartupMessages(require(quantmod))
+suppressPackageStartupMessages(require(caTools))
 
-assets <- 
+#Lista dos tickers dos ativos usados na construção do portifólio 
 
-assetReturns <- 100*assets
+TickerList <- c("^BVSP", "^GSPC","^CMC200", "GC=F", "BTC-USD")
 
-targetReturn <- mean(colMeans(assetReturns))
+#lê os preços de fechamento das ações e mantém apenas elas para uso de análise
 
-portfolioWeights <- function(assetReturns, targetReturn)
-{
-  nAssets = ncol(assetReturns)
-  portfolio = solve.QP(
-    Dmat = cov(assetReturns),
-    dvec = rep(0, times=nAssets),
-    Amat = t(rbind(Return=colMeans(assetReturns),
-                   Budget=rep(1, nAssets), LongOnly=diag(nAssets))),
-    bvec = c(Return=targetReturn, budget=1,
-             LongOnly=rep(0, times=nAssets)),
-    meq=2)
-  weights = portfolio$solution
-  weights
-}
+ClosingPricesRead <- NULL
+for (Ticker in TickerList)
+  ClosingPricesRead <- cbind(ClosingPricesRead,
+                             getSymbols.yahoo(Ticker, from="1950-01-01", verbose=FALSE, auto.assign=FALSE)[,6]) # [,6] = keep the adjusted prices
 
-tangencyPortfolio <-
-  function (assetReturns, riskFreeRate=0)
-  {
-    # 1 Sharpe Ratio Function:
-    sharpeRatio <- function(x, assetReturns, riskFreeRate)
-    {
-      targetReturn = x
-      weights = portfolioWeights(assetReturns, targetReturn)
-      targetRisk = sqrt( weights %*% cov(assetReturns) %*% weights )[[1]]
-      ratio = (targetReturn - riskFreeRate)/targetRisk
-      attr(ratio, "weights") <- weights
-      attr(ratio, "targetRisk") <- targetRisk
-      ratio
-    }
-# 2 Optimize Tangency Portfolio:
-    nAssets = ncol(assetReturns)
-    mu = colMeans(assetReturns)
-    Cov = cov(assetReturns)
-    tgPortfolio <- optimize(
-      f=sharpeRatio, interval=range(mu), maximum=TRUE,
-      assetReturns=assetReturns, riskFreeRate=riskFreeRate)
-    # 3 Tangency Portfolio Characteristics:
-    tgReturn = tgPortfolio$maximum
-    tgRisk = attr(tgPortfolio$objective, "targetRisk")
-    tgWeights = attr(tgPortfolio$objective, "weights")
-    sharpeRatio = sharpeRatio(tgReturn, assetReturns, riskFreeRate)[[1]]
-    # Return Value:
-    list(
-      sharpeRatio=sharpeRatio,
-      tgRisk=tgRisk, tgReturn=tgReturn, tgWeights=tgWeights)
-  }
+#mantém apenas as datas com preços de fechamento
 
-#referencias (vistas em 13/04 e 14/04):
+ClosingPrices <- ClosingPricesRead[apply(ClosingPricesRead,1,function(x) all(!is.na(x))),]
+
+#converte preços para retornos diários
+
+returns <- as.timeSeries((tail(ClosingPrices,-1) / as.numeric(head(ClosingPrices,-1)))-1)
+
+#calcula fronteira eficiente
+
+Frontier <- portfolioFrontier(returns)
+
+#monta o gráfico da fronteira
+
+plot(Frontier,1) # can also call the plot routine so it only plots the frontier: plot(Frontier,1)
+
+#gera as médias e a matrix de covariância dos retornos dos preços dos ativos
+
+getStatistics(Frontier)$mean #input de dados na fronteira eficiente
+cor(returns)
+
+#gerar gráfico de risco e retorno anualizado
+#converter de retorno diário para anualizado e pontos de risco na fronteira eficiente
+
+riskReturnPoints <- frontierPoints(Frontier) # get risk and return values for points on the efficient frontier
+annualizedPoints <- data.frame(targetRisk=riskReturnPoints[, "targetRisk"] * sqrt(252),
+                               targetReturn=riskReturnPoints[,"targetReturn"] * 252)
+
+plot(annualizedPoints)
+
+#Gráfico do índice Sharpe para cada ponto na fronteira
+
+riskFreeRate <- 0.02
+plot((annualizedPoints[,"targetReturn"] - riskFreeRate) / annualizedPoints[,"targetRisk"], xlab="point on efficient frontier", ylab="Sharpe ratio")
+
+#gera gráfico de alocação para cada ativo para cada ponto da fronteira eficiente 
+#gráfico de pesos na fronteira
+
+allocations <- getWeights(Frontier@portfolio) #pega alocações em cada ponto da fronteira eficiente
+colnames(allocations) <- TickerList
+barplot(t(allocations), col=rainbow(ncol(allocations)+2), legend=colnames(allocations))
+
+allocations
+
+#portifólios com restrições diferentes
+
+constraints <- "minW[1:length(TickerList)]=-1"
+
+Frontier <- portfolioFrontier(returns, constraints = constraints)
+Frontier.LongOnly <- portfolioFrontier(returns)
+
+riskReturnPoints <- frontierPoints(Frontier)
+annualizedPoints <- data.frame(targetRisk=riskReturnPoints[, "targetRisk"] * sqrt(252),
+                               targetReturn=riskReturnPoints[,"targetReturn"] * 252)
+riskReturnPoints.LongOnly <- frontierPoints(Frontier.LongOnly)
+annualizedPoints.LongOnly <- data.frame(targetRisk=riskReturnPoints.LongOnly[, "targetRisk"] * sqrt(252),
+                                        targetReturn=riskReturnPoints.LongOnly[,"targetReturn"] * 252)
+
+xlimit <- range(annualizedPoints[,1], annualizedPoints.LongOnly[,1])
+ylimit <- range(annualizedPoints[,2], annualizedPoints.LongOnly[,2])
+
+plot(annualizedPoints.LongOnly, xlim=xlimit, ylim=ylimit, pch=16, col="blue")
+points(annualizedPoints, col="red", pch=16)
+legend("right", legend=c("long only","constrained"), col=c("blue","red"), pch=16)
+
+#outras restrições
+
+constraints <- c("minW[1:length(TickerList)]=.10","maxW[1:length(TickerList)]=.60")
+
+
+#referencias (vistas em 13/04, 14/04 e 01/06):
 #https://medium.com/@gabriela.koreeda/an%C3%A1lise-de-uma-carteira-de-renda-fixa-em-r-d13510e95ada
 #https://github.com/gabrielakoreeda/carteira-investimentos/blob/master/carteira.R
 #https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/na.locf
@@ -122,4 +104,3 @@ tangencyPortfolio <-
 #https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/na.locf
 #https://www.youtube.com/watch?v=7rFsu48oBn8&ab_channel=C%C3%B3digoQuant-Finan%C3%A7asQuantitativas
 #https://www.youtube.com/watch?v=SN4vpCY95k0
-#Basic R for Finance
