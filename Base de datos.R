@@ -40,7 +40,7 @@ Frontier <- portfolioFrontier(returns)
 
 #monta o gráfico da fronteira
 
-plot(Frontier,1) # can also call the plot routine so it only plots the frontier: plot(Frontier,1)
+plot(Frontier,1) 
 
 #gera as médias e a matrix de covariância dos retornos dos preços dos ativos
 
