@@ -45,13 +45,13 @@ cor(returns)
 #gerar gráfico de risco e retorno anualizado
 #converter de retorno diário para anualizado e pontos de risco na fronteira eficiente
 
-riskReturnPoints <- frontierPoints(Frontier) # get risk and return values for points on the efficient frontier
+riskReturnPoints <- frontierPoints(Frontier) #pega valores de risco e retorno em pontos da fronteira
 annualizedPoints <- data.frame(targetRisk=riskReturnPoints[, "targetRisk"] * sqrt(252),
                                targetReturn=riskReturnPoints[,"targetReturn"] * 252)
 
 plot(annualizedPoints)
 
-#Gráfico do índice Sharpe para cada ponto na fronteira
+#Gráfico do índice Sharpe para cada ponto na fronteira, definimos o ativo livre de risco pela cotação atual do cdi
 
 riskFreeRate <- 0.02
 plot((annualizedPoints[,"targetReturn"] - riskFreeRate) / annualizedPoints[,"targetRisk"], xlab="point on efficient frontier", ylab="Sharpe ratio")
