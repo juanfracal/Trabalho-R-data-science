@@ -19,7 +19,7 @@ TickerList <- c("^BVSP", "^GSPC","^CMC200", "GC=F", "BTC-USD")
 ClosingPricesRead <- NULL
 for (Ticker in TickerList)
   ClosingPricesRead <- cbind(ClosingPricesRead,
-                             getSymbols.yahoo(Ticker, from="1950-01-01", verbose=FALSE, auto.assign=FALSE)[,6]) # [,6] = mantém preços ajustados
+                             getSymbols.yahoo(Ticker, from="2017-01-01", verbose=FALSE, auto.assign=FALSE)[,6]) # [,6] = mantém preços ajustados
 
 #mantém apenas as datas com preços de fechamento
 
@@ -34,8 +34,8 @@ returns <- as.timeSeries((tail(ClosingPrices,-1) / as.numeric(head(ClosingPrices
 Frontier <- portfolioFrontier(returns)
 
 #monta o gráfico da fronteira
-
-plot(Frontier,1) 
+plot(Frontier,1)
+plot(Frontier,3)
 
 #gera as médias e a matrix de covariância dos retornos dos preços dos ativos
 
@@ -45,15 +45,15 @@ cor(returns)
 #gerar gráfico de risco e retorno anualizado
 #converter de retorno diário para anualizado e pontos de risco na fronteira eficiente
 
-riskReturnPoints <- frontierPoints(Frontier) #pega valores de risco e retorno em pontos da fronteira
+riskReturnPoints <- frontierPoints(Frontier) #pega valores de risco e retorno na fronteira
 annualizedPoints <- data.frame(targetRisk=riskReturnPoints[, "targetRisk"] * sqrt(252),
                                targetReturn=riskReturnPoints[,"targetReturn"] * 252)
 
 plot(annualizedPoints)
 
-#Gráfico do índice Sharpe para cada ponto na fronteira, definimos o ativo livre de risco pela cotação atual do cdi
+#Gráfico do índice Sharpe para cada ponto na fronteira
 
-riskFreeRate <- 0.02
+riskFreeRate <- 0.1265
 plot((annualizedPoints[,"targetReturn"] - riskFreeRate) / annualizedPoints[,"targetRisk"], xlab="point on efficient frontier", ylab="Sharpe ratio")
 
 #gera gráfico de alocação para cada ativo para cada ponto da fronteira eficiente 
