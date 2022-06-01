@@ -3,11 +3,6 @@
 #Depois comparariamos as carteiras em relação aos Retornos, Risco, Sharpe, Volatilidade anualizada e Máx. Drawdown.
 #Por último, responderíamos a pergunta: Vale apena investir em criptoativos?
 
-#Integrantes: Juan Francisco, Renan Olivier e Guilherme Vaccari
-#Nosso objetivo é criar diferentes carteiras com distribuições diferentes de diversos ativos como Renda Variável, Renda fixa, ouro e criptomoedas.
-#Depois comparariamos as carteiras em relação aos Retornos, Risco, Sharpe, Volatilidade anualizada e Máx. Drawdown.
-#Por último, responderíamos a pergunta: Vale apena investir em criptoativos?
-
 #pega as rotinas das bibliotecas necessárias
 
 suppressPackageStartupMessages(require (timeSeries))
