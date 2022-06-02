@@ -1,14 +1,7 @@
 #Integrantes: Juan Francisco, Renan Olivier e Guilherme Vaccari
-#Nosso objetivo é criar diferentes carteiras com distribuições diferentes de diversos ativos como Renda Variável, Renda fixa, ouro e criptomoedas.
-#
+#Nosso objetivo é criar diferentes carteiras com distribuições diferentes de diversos ativos como Renda Variável, ouro e criptomoedas.
+#A ideia é usar a literatura clássica financeira para encontrar a alocação ideal para cada nível de risco
 #Por último, responderíamos a pergunta: Vale apena investir em criptoativos?
-
-library(readr)
-Perfil <- read_csv("C:/Users/GUILHERME/Desktop/Perfil.csv") # Importa o excel do google sheets
-Perfil$hora = NULL # Retira a coluna que informa a data da resposta
-mean(as.matrix(Perfil)) # Transforma o dado em matriz para achar a média
-
-
 
 #pega as rotinas das bibliotecas necessárias
 
@@ -42,7 +35,7 @@ ClosingPricesRead <- NULL
 for (Ticker in TickerList)
   ClosingPricesRead <- cbind(ClosingPricesRead,
                              getSymbols.yahoo(Ticker, from="2017-01-01", verbose=FALSE, auto.assign=FALSE)[,6]) 
-# [,6] = indica que só é para usar preços ajustados
+# [,6] = mantém preços ajustados
 
 #mantém apenas as datas com preços de fechamento
 
@@ -57,14 +50,14 @@ returns <- as.timeSeries((tail(ClosingPrices,-1) / as.numeric(head(ClosingPrices
 Frontier <- portfolioFrontier(returns)
 
 #monta o gráfico da fronteira
-plot(Frontier,1)#Fronteira de média-variância markowitz
-plot(Frontier,3)#CML ou Capital Market Line, linha que tangência a fronteira eficiente
-plot(Frontier,7)#simulações de monte carlo
+plot(Frontier,1)
+plot(Frontier,3)
+plot(Frontier,7)
 
 #gera as médias e a matrix de covariância dos retornos dos preços dos ativos
 
 getStatistics(Frontier)$mean #input de dados na fronteira eficiente
-cor(returns)#correlação entre os ativos
+cor(returns)
 
 #gerar gráfico de risco e retorno anualizado
 #converter de retorno diário para anualizado e pontos de risco na fronteira eficiente
@@ -77,7 +70,7 @@ plot(annualizedPoints)
 
 #Gráfico do índice Sharpe para cada ponto na fronteira
 
-riskFreeRate <- 0.1265 #quanto rende o CDI
+riskFreeRate <- 0.1265
 plot((annualizedPoints[,"targetReturn"] - riskFreeRate) / annualizedPoints[,"targetRisk"], xlab="point on efficient frontier", ylab="Sharpe ratio")
 
 #gera gráfico de alocação para cada ativo para cada ponto da fronteira eficiente 
@@ -86,6 +79,7 @@ plot((annualizedPoints[,"targetReturn"] - riskFreeRate) / annualizedPoints[,"tar
 allocations <- getWeights(Frontier@portfolio) #pega alocações em cada ponto da fronteira eficiente
 colnames(allocations) <- TickerList
 barplot(t(allocations), col=rainbow(ncol(allocations)+2), legend=colnames(allocations), xlab="sucetibilidade a risco", ylab="proporção de alocação")
+
 allocations
 
 annualizedPoints
@@ -111,7 +105,6 @@ plot(annualizedPoints.LongOnly, xlim=xlimit, ylim=ylimit, pch=16, col="blue")
 points(annualizedPoints, col="red", pch=16)
 legend("right", legend=c("long only","constrained"), col=c("blue","red"), pch=16)
 
-#referencias (vistas em 13/04, 14/04 e 01/06):
 #referencias (vistas em 13/04, 14/04 e 01/06):
 #https://www.youtube.com/watch?v=uwuPQUa2TjI&t=457s&ab_channel=codebliss
 #https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/na.locf
