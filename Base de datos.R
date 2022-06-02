@@ -9,17 +9,24 @@ suppressPackageStartupMessages(require (timeSeries))
 suppressPackageStartupMessages(require (fPortfolio)) 
 suppressPackageStartupMessages(require(quantmod))
 suppressPackageStartupMessages(require(caTools))
+suppressPackageStartupMessages(require(forecastHybrid))
+suppressPackageStartupMessages(require(tidyquant))
 
 #Lista dos tickers dos ativos usados na construção do portifólio 
+#BVSP é indicativo do IBOVESPA, benchmark do mercado acionário brasileiro
+#GSPC é indicativo do SP500, benchmark do mercado acionário americano
+#GC=F é indicativo dos contratos de ouro, hedge anti-inflacionário
+#BTC-USD é indicativo do BTC em dólar, principal criptomoeda do mercado criptográfico
 
-TickerList <- c("^BVSP", "^GSPC","^CMC200", "GC=F", "BTC-USD")
+TickerList <- c("^BVSP", "^GSPC", "GC=F", "BTC-USD")
 
 #lê os preços de fechamento das ações e mantém apenas elas para uso de análise
 
 ClosingPricesRead <- NULL
 for (Ticker in TickerList)
   ClosingPricesRead <- cbind(ClosingPricesRead,
-                             getSymbols.yahoo(Ticker, from="2017-01-01", verbose=FALSE, auto.assign=FALSE)[,6]) # [,6] = mantém preços ajustados
+                             getSymbols.yahoo(Ticker, from="2017-01-01", verbose=FALSE, auto.assign=FALSE)[,6]) 
+# [,6] = mantém preços ajustados
 
 #mantém apenas as datas com preços de fechamento
 
@@ -62,8 +69,9 @@ plot((annualizedPoints[,"targetReturn"] - riskFreeRate) / annualizedPoints[,"tar
 allocations <- getWeights(Frontier@portfolio) #pega alocações em cada ponto da fronteira eficiente
 colnames(allocations) <- TickerList
 barplot(t(allocations), col=rainbow(ncol(allocations)+2), legend=colnames(allocations))
-
 allocations
+
+annualizedPoints
 
 #portifólios com restrições diferentes
 
@@ -86,16 +94,9 @@ plot(annualizedPoints.LongOnly, xlim=xlimit, ylim=ylimit, pch=16, col="blue")
 points(annualizedPoints, col="red", pch=16)
 legend("right", legend=c("long only","constrained"), col=c("blue","red"), pch=16)
 
-#outras restrições
-
-constraints <- c("minW[1:length(TickerList)]=.10","maxW[1:length(TickerList)]=.60")
-
-
 #referencias (vistas em 13/04, 14/04 e 01/06):
-#https://medium.com/@gabriela.koreeda/an%C3%A1lise-de-uma-carteira-de-renda-fixa-em-r-d13510e95ada
-#https://github.com/gabrielakoreeda/carteira-investimentos/blob/master/carteira.R
-#https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/na.locf
 #https://www.youtube.com/watch?v=uwuPQUa2TjI&t=457s&ab_channel=codebliss
 #https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/na.locf
 #https://www.youtube.com/watch?v=7rFsu48oBn8&ab_channel=C%C3%B3digoQuant-Finan%C3%A7asQuantitativas
 #https://www.youtube.com/watch?v=SN4vpCY95k0
+#https://www.youtube.com/watch?v=O33dF532pRo&ab_channel=ElliotNoma
