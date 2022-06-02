@@ -3,6 +3,13 @@
 #
 #Por último, responderíamos a pergunta: Vale apena investir em criptoativos?
 
+library(readr)
+Perfil <- read_csv("C:/Users/GUILHERME/Desktop/Perfil.csv") # Importa o excel do google sheets
+Perfil$hora = NULL # Retira a coluna que informa a data da resposta
+mean(as.matrix(Perfil)) # Transforma o dado em matriz para achar a média
+
+
+
 #pega as rotinas das bibliotecas necessárias
 
 suppressPackageStartupMessages(require (timeSeries))
