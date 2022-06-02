@@ -42,7 +42,7 @@ ClosingPricesRead <- NULL
 for (Ticker in TickerList)
   ClosingPricesRead <- cbind(ClosingPricesRead,
                              getSymbols.yahoo(Ticker, from="2017-01-01", verbose=FALSE, auto.assign=FALSE)[,6]) 
-# [,6] = mantém preços ajustados
+# [,6] = indica que só é para usar preços ajustados
 
 #mantém apenas as datas com preços de fechamento
 
@@ -57,14 +57,14 @@ returns <- as.timeSeries((tail(ClosingPrices,-1) / as.numeric(head(ClosingPrices
 Frontier <- portfolioFrontier(returns)
 
 #monta o gráfico da fronteira
-plot(Frontier,1)
-plot(Frontier,3)
-plot(Frontier,7)
+plot(Frontier,1)#Fronteira de média-variância markowitz
+plot(Frontier,3)#CML ou Capital Market Line, linha que tangência a fronteira eficiente
+plot(Frontier,7)#simulações de monte carlo
 
 #gera as médias e a matrix de covariância dos retornos dos preços dos ativos
 
 getStatistics(Frontier)$mean #input de dados na fronteira eficiente
-cor(returns)
+cor(returns)#correlação entre os ativos
 
 #gerar gráfico de risco e retorno anualizado
 #converter de retorno diário para anualizado e pontos de risco na fronteira eficiente
@@ -77,7 +77,7 @@ plot(annualizedPoints)
 
 #Gráfico do índice Sharpe para cada ponto na fronteira
 
-riskFreeRate <- 0.1265
+riskFreeRate <- 0.1265 #quanto rende o CDI
 plot((annualizedPoints[,"targetReturn"] - riskFreeRate) / annualizedPoints[,"targetRisk"], xlab="point on efficient frontier", ylab="Sharpe ratio")
 
 #gera gráfico de alocação para cada ativo para cada ponto da fronteira eficiente 
@@ -112,8 +112,12 @@ points(annualizedPoints, col="red", pch=16)
 legend("right", legend=c("long only","constrained"), col=c("blue","red"), pch=16)
 
 #referencias (vistas em 13/04, 14/04 e 01/06):
+#referencias (vistas em 13/04, 14/04 e 01/06):
 #https://www.youtube.com/watch?v=uwuPQUa2TjI&t=457s&ab_channel=codebliss
 #https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/na.locf
 #https://www.youtube.com/watch?v=7rFsu48oBn8&ab_channel=C%C3%B3digoQuant-Finan%C3%A7asQuantitativas
 #https://www.youtube.com/watch?v=SN4vpCY95k0
 #https://www.youtube.com/watch?v=O33dF532pRo&ab_channel=ElliotNoma
+#https://rpubs.com/Lucas_Venturini/661262
+#aula 18 2 Diogo Robaina
+#https://elliotnoma.wordpress.com/2013/01/22/construct-a-stock-portfolio-using-r/
