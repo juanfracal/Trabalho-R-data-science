@@ -1,6 +1,6 @@
 #Integrantes: Juan Francisco, Renan Olivier e Guilherme Vaccari
 #Nosso objetivo é criar diferentes carteiras com distribuições diferentes de diversos ativos como Renda Variável, Renda fixa, ouro e criptomoedas.
-#Depois comparariamos as carteiras em relação aos Retornos, Risco, Sharpe, Volatilidade anualizada e Máx. Drawdown.
+#
 #Por último, responderíamos a pergunta: Vale apena investir em criptoativos?
 
 #pega as rotinas das bibliotecas necessárias
@@ -16,7 +16,16 @@ suppressPackageStartupMessages(require(tidyquant))
 #BVSP é indicativo do IBOVESPA, benchmark do mercado acionário brasileiro
 #GSPC é indicativo do SP500, benchmark do mercado acionário americano
 #GC=F é indicativo dos contratos de ouro, hedge anti-inflacionário
-#BTC-USD é indicativo do BTC em dólar, principal criptomoeda do mercado criptográfico
+#BTC-USD é indicativo do Bitcoin em dólar, principal criptomoeda do mercado criptográfico
+#ETH-USD é indicativo do Ethereum em dólar, principal plataforma de Defi do mercado criptográfico
+
+portfolio = c("BTC-USD","ETH-USD","^BVSP","^GSPC","GC=F")
+getSymbols(portfolio, src="yahoo", from="2017-01-01")
+barChart(`BTC-USD`,theme='white.mono',bar.type='hlc')
+barChart(`ETH-USD`,theme='white.mono',bar.type='hlc')
+barChart(`GC=F`,theme='white.mono',bar.type='hlc')
+barChart(`BVSP`,theme='white.mono',bar.type='hlc')
+barChart(`GSPC`,theme='white.mono',bar.type='hlc')
 
 TickerList <- c("^BVSP", "^GSPC", "GC=F", "BTC-USD", "ETH-USD")
 
