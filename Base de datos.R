@@ -18,7 +18,7 @@ suppressPackageStartupMessages(require(tidyquant))
 #GC=F é indicativo dos contratos de ouro, hedge anti-inflacionário
 #BTC-USD é indicativo do BTC em dólar, principal criptomoeda do mercado criptográfico
 
-TickerList <- c("^BVSP", "^GSPC", "GC=F", "BTC-USD")
+TickerList <- c("^BVSP", "^GSPC", "GC=F", "BTC-USD", "ETH-USD")
 
 #lê os preços de fechamento das ações e mantém apenas elas para uso de análise
 
@@ -43,6 +43,7 @@ Frontier <- portfolioFrontier(returns)
 #monta o gráfico da fronteira
 plot(Frontier,1)
 plot(Frontier,3)
+plot(Frontier,7)
 
 #gera as médias e a matrix de covariância dos retornos dos preços dos ativos
 
