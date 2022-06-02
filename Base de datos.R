@@ -85,7 +85,7 @@ plot((annualizedPoints[,"targetReturn"] - riskFreeRate) / annualizedPoints[,"tar
 
 allocations <- getWeights(Frontier@portfolio) #pega alocações em cada ponto da fronteira eficiente
 colnames(allocations) <- TickerList
-barplot(t(allocations), col=rainbow(ncol(allocations)+2), legend=colnames(allocations))
+barplot(t(allocations), col=rainbow(ncol(allocations)+2), legend=colnames(allocations), xlab="sucetibilidade a risco", ylab="proporção de alocação")
 allocations
 
 annualizedPoints
